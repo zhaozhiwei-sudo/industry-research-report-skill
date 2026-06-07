@@ -1,0 +1,4 @@
+interface:
+  display_name: "Industry Research Report"
+  short_description: "Build auditable HTML industry research reports"
+  default_prompt: "Use $industry-research-report to research an industry, verify sources, and build a professional HTML report."
