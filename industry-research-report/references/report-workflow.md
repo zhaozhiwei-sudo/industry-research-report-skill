@@ -1,5 +1,21 @@
 # Auditable Report Workflow
 
+## Team Setup
+
+Before Step 1, define who owns each part of the report:
+
+- Chief analyst: final narrative and rating.
+- Data expert: source ledger and reliability checks.
+- Industry analyst: policy, demand, pricing, and technology route.
+- Company analyst: listed-company evidence and announcement verification.
+- Valuation and trading analyst: valuation dashboard and crowding interpretation.
+- Visualization editor: HTML layout, navigation, and final consistency.
+
+Minimum operating rule:
+
+- No expert writes a final conclusion without citing the source rows that support it.
+- No section is considered finished until another role can verify where its evidence came from.
+
 ## Step 1: Scope And Universe
 
 Output:
@@ -17,6 +33,7 @@ Verification:
 Entry standard for next step:
 
 - Industry boundary, company pool, and output format are explicit.
+- Team role ownership is explicit.
 
 ## Step 2: Source Inventory
 
@@ -31,10 +48,12 @@ Verification:
 - Open representative links.
 - Remove unknown institutions and media-only summaries.
 - Prefer primary sources over reposts.
+- Require the data expert to flag unsupported claims before other experts draft around them.
 
 Entry standard:
 
 - At least several A-level anchors and enough B-level reports to support consensus.
+- The source ledger is shared across the full team.
 
 ## Step 3: Data Collection
 
@@ -49,6 +68,7 @@ Verification:
 - Record collection timestamp.
 - Cross-check suspicious outliers.
 - Never invent missing PE/PB/holding percentiles.
+- Require all analysts to use the same dated snapshot for comparable fields.
 
 Entry standard:
 
@@ -67,6 +87,7 @@ Verification:
 
 - Every important conclusion maps to source rows.
 - Separate factual observation from interpretation.
+- Resolve disagreements by evidence priority, not by writing confidence.
 
 Entry standard:
 
@@ -85,6 +106,7 @@ Verification:
 
 - Avoid recommending high-valuation names without order/profit evidence.
 - Flag stale, missing, or unreliable fields.
+- Make the chief analyst explicitly approve any high-confidence conclusion on incomplete data.
 
 Entry standard:
 
@@ -104,6 +126,7 @@ Verification:
 - Open locally in browser.
 - Check section anchors, source rows, and counts.
 - Confirm switchboard metadata matches report counts.
+- Confirm that section text, source tables, and expert conclusions still agree after layout edits.
 
 Entry standard:
 
