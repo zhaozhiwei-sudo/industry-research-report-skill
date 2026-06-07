@@ -47,6 +47,7 @@ industry-research-report/
     create_report_scaffold.py
 examples/
   robotics-demo-report.html
+  multi-industry-switchboard-demo.html
 ```
 
 ## Install
@@ -76,7 +77,10 @@ The scaffold is only a starting point. Fill it with verified data, A/B sources, 
 
 ## Example Output
 
-Open [examples/robotics-demo-report.html](./examples/robotics-demo-report.html) in a browser to see the style and structure of the expected HTML output.
+Open these examples in a browser:
+
+- [examples/robotics-demo-report.html](./examples/robotics-demo-report.html): single industry report demo
+- [examples/multi-industry-switchboard-demo.html](./examples/multi-industry-switchboard-demo.html): multi-industry switchboard demo
 
 ## Chinese
 
@@ -108,4 +112,7 @@ Open [examples/robotics-demo-report.html](./examples/robotics-demo-report.html) 
 
 ### 示例
 
-可以直接打开 [examples/robotics-demo-report.html](./examples/robotics-demo-report.html) 查看 demo。
+可以直接打开下面两个 demo：
+
+- [examples/robotics-demo-report.html](./examples/robotics-demo-report.html)：单行业报告示例
+- [examples/multi-industry-switchboard-demo.html](./examples/multi-industry-switchboard-demo.html)：多行业切换台示例

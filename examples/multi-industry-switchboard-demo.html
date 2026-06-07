@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>多行业切换台 Demo</title>
+  <style>
+    :root {
+      --ink: #17202e;
+      --muted: #667085;
+      --line: #d7e1ea;
+      --paper: #ffffff;
+      --bg: #e9f0f5;
+      --navy: #16313a;
+      --teal: #0f766e;
+      --teal-soft: #dff7f3;
+      --blue: #2a5ec8;
+      --amber: #b86b17;
+      --green: #0a7a44;
+      --shadow: 0 20px 44px rgba(17, 27, 41, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "PingFang SC", "Noto Sans SC", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.10), transparent 24%),
+        linear-gradient(180deg, #eff5f8 0%, #e7eef3 100%);
+    }
+    h1, h2, h3, p { margin: 0; }
+    button { font: inherit; }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      padding: 18px;
+      color: #fff;
+      background: linear-gradient(180deg, #15303a 0%, #10252d 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .brand {
+      padding: 10px 4px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    }
+    .eyebrow {
+      color: #bff4ea;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+    .brand h1 {
+      margin-top: 9px;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+    .brand p {
+      margin-top: 10px;
+      color: rgba(231, 238, 245, 0.78);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .section-label {
+      color: #bff4ea;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .overview-card,
+    .nav-button {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      color: #e8eff6;
+      background: rgba(255, 255, 255, 0.05);
+      text-align: left;
+    }
+
+    .overview-card {
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+    .overview-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .overview-stat {
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .overview-stat span {
+      display: block;
+      color: rgba(231, 238, 245, 0.70);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    .overview-stat strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 8px;
+    }
+    .nav-button {
+      min-height: 80px;
+      padding: 12px;
+      cursor: pointer;
+      display: grid;
+      gap: 7px;
+    }
+    .nav-button:hover,
+    .nav-button.active {
+      border-color: rgba(191, 244, 234, 0.55);
+      background: rgba(15, 118, 110, 0.34);
+    }
+    .nav-button strong {
+      font-size: 15px;
+      line-height: 1.2;
+    }
+    .nav-button span {
+      color: rgba(231, 238, 245, 0.75);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .main {
+      min-width: 0;
+      padding: 18px;
+    }
+    .hero {
+      padding: 24px 26px;
+      border-radius: 12px;
+      color: #fff;
+      background:
+        radial-gradient(circle at top right, rgba(99, 196, 178, 0.28), transparent 28%),
+        linear-gradient(135deg, #183640 0%, #10262e 100%);
+      box-shadow: var(--shadow);
+    }
+    .hero h2 {
+      margin-top: 10px;
+      font-size: 44px;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    .hero p {
+      margin-top: 14px;
+      max-width: 920px;
+      color: #d7e2ea;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      color: #d8fff8;
+      border: 1px solid rgba(191, 244, 234, 0.30);
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .top-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+      box-shadow: 0 8px 24px rgba(17, 27, 41, 0.06);
+      overflow: hidden;
+    }
+    .card-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid #e8edf2;
+      background: #fbfdfe;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .card-head h3 {
+      font-size: 17px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+      border: 1px solid #bfe0d9;
+      background: #eefaf7;
+      color: var(--teal);
+    }
+    .card-body {
+      padding: 16px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .summary-box {
+      padding: 14px;
+      border: 1px solid #dbe5ec;
+      border-radius: 10px;
+      background: #fbfdfe;
+    }
+    .summary-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .summary-box strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 26px;
+      line-height: 1.05;
+    }
+    .summary-box p {
+      margin-top: 8px;
+      color: #475467;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .industry-list {
+      display: grid;
+      gap: 12px;
+    }
+    .industry-row {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 14px;
+      border: 1px solid #e0e8ef;
+      border-radius: 10px;
+      background: #fbfdfe;
+    }
+    .industry-row strong {
+      font-size: 15px;
+    }
+    .industry-row p {
+      color: #526171;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .mini-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    .report-card {
+      margin-top: 16px;
+    }
+    .report-header {
+      padding: 20px 22px;
+      border-bottom: 1px solid #e8edf2;
+      background: linear-gradient(180deg, #f8fbfd 0%, #f3f8fb 100%);
+    }
+    .report-header .meta {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .report-header h3 {
+      margin-top: 8px;
+      font-size: 30px;
+      line-height: 1.12;
+    }
+    .report-header p {
+      margin-top: 12px;
+      color: #526171;
+      font-size: 14px;
+      line-height: 1.75;
+    }
+    .report-body {
+      padding: 18px 22px 22px;
+      display: grid;
+      gap: 16px;
+    }
+    .report-section {
+      padding: 14px;
+      border: 1px solid #dbe5ec;
+      border-radius: 10px;
+      background: #fbfdfe;
+    }
+    .report-section h4 {
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    .report-section p {
+      color: #475467;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px 9px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+      vertical-align: top;
+      color: #475467;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    th {
+      background: #fbfdfe;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    td strong {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      color: #556575;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1100px) {
+      .app { grid-template-columns: 1fr; }
+      .top-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      .main, .sidebar { padding: 12px; }
+      .hero h2 { font-size: 34px; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .industry-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <section class="brand">
+        <div class="eyebrow">Multi-Industry Demo / Switchboard</div>
+        <h1>多行业切换台 Demo</h1>
+        <p>演示 skill 生成“多行业总览 + 单行业切换”的输出形式。适合把多份行业报告、审计页和摘要页收在一个入口里。</p>
+      </section>
+
+      <div class="section-label">总览状态</div>
+      <section class="overview-card">
+        <div class="overview-stats">
+          <div class="overview-stat"><span>行业报告</span><strong>9</strong></div>
+          <div class="overview-stat"><span>A/B 来源</span><strong>166</strong></div>
+          <div class="overview-stat"><span>券商研报</span><strong>约119</strong></div>
+          <div class="overview-stat"><span>补齐进度</span><strong>9 / 9</strong></div>
+        </div>
+      </section>
+
+      <div class="section-label">行业切换</div>
+      <nav id="navList" class="nav-list"></nav>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <div class="eyebrow">Integrated Industry View</div>
+        <h2>九行业报告统一入口</h2>
+        <p>这个 demo 模拟一个研究交付台：左侧快速切换行业，右侧展示当前行业的摘要、来源、公司映射和估值说明。真实版本可以进一步内嵌完整 HTML 报告、来源链接和审计页。</p>
+        <div class="hero-tags">
+          <span class="hero-tag">总览页</span>
+          <span class="hero-tag">行业切换</span>
+          <span class="hero-tag">审计思路</span>
+          <span class="hero-tag">单文件可集成</span>
+        </div>
+      </section>
+
+      <section class="top-grid">
+        <article class="card">
+          <div class="card-head">
+            <h3>行业覆盖快照</h3>
+            <span class="pill">演示数据</span>
+          </div>
+          <div class="card-body">
+            <div class="summary-grid">
+              <div class="summary-box">
+                <span>当前聚焦</span>
+                <strong id="focusIndustry">机器人</strong>
+                <p id="focusMeta">人形机器人 / 具身智能 / 灵巧手 / 18 条 A/B 来源</p>
+              </div>
+              <div class="summary-box">
+                <span>主结论</span>
+                <strong id="focusRating">产业加速</strong>
+                <p id="focusSummary">按量产证据分层，先看订单与盈利兑现，再看主题弹性。</p>
+              </div>
+              <div class="summary-box">
+                <span>展示重点</span>
+                <strong>切换效率</strong>
+                <p>适合在一个入口里对比多个行业的来源强度与投资主线。</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <h3>已补齐行业</h3>
+            <span class="pill">示例清单</span>
+          </div>
+          <div class="card-body industry-list" id="industryList"></div>
+        </article>
+      </section>
+
+      <article class="card report-card">
+        <div class="report-header">
+          <div class="meta" id="reportMeta">机器人 / 18 条 A/B 来源 / 15 篇券商研报</div>
+          <h3 id="reportTitle">机器人行业专业投研报告</h3>
+          <p id="reportLead">围绕工业机器人、人形机器人、具身智能和核心零部件展开，重点看量产验证、客户认证、订单兑现与估值纪律。</p>
+        </div>
+        <div class="report-body">
+          <section class="report-section">
+            <h4>投研结论</h4>
+            <p id="reportConclusion">产业加速，但配置顺序必须向证据完整、财报兑现和产业链价值量高的公司集中。</p>
+          </section>
+
+          <section class="report-section">
+            <h4>关键事实与证据链</h4>
+            <p id="reportFacts">工信部指导意见和 IFR 提供 A 级锚点，多家券商策略共同指向 2026 年量产验证窗口。</p>
+          </section>
+
+          <section class="report-section">
+            <h4>来源快照</h4>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>等级</th><th>来源</th><th>标题</th><th>时间</th><th>用途</th></tr>
+                </thead>
+                <tbody id="sourcesBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="report-section">
+            <h4>代表公司与估值说明</h4>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>公司</th><th>定位</th><th>估值/热度提示</th><th>结论</th></tr>
+                </thead>
+                <tbody id="companiesBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <div class="footer-note">
+        Demo only. In production, this switchboard can be expanded into a full integrated suite with embedded reports, source links, audit pages, and local browser verification.
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const industries = [
+      {
+        id: "robotics",
+        name: "机器人",
+        meta: "人形机器人 / 具身智能 / 灵巧手 / 18 条 A/B 来源",
+        rating: "产业加速",
+        summary: "按量产证据分层，先看订单与盈利兑现，再看主题弹性。",
+        title: "机器人行业专业投研报告",
+        lead: "围绕工业机器人、人形机器人、具身智能和核心零部件展开，重点看量产验证、客户认证、订单兑现与估值纪律。",
+        conclusion: "产业加速，但配置顺序必须向证据完整、财报兑现和产业链价值量高的公司集中。",
+        facts: "工信部指导意见和 IFR 提供 A 级锚点，多家券商策略共同指向 2026 年量产验证窗口。",
+        sources: [
+          ["A", "工业和信息化部", "《人形机器人创新发展指导意见》", "2023-11-02", "政策节点"],
+          ["A", "IFR", "World Robotics 2025", "2025", "工业机器人底座"],
+          ["B", "开源证券", "机械行业 2026 年度投资策略", "2025-11-04", "量产窗口"]
+        ],
+        companies: [
+          ["汇川技术", "工业自动化", "估值相对稳健", "偏确定性底座"],
+          ["绿的谐波", "谐波减速器", "高弹性高波动", "需订单兑现验证"]
+        ]
+      },
+      {
+        id: "ai-compute",
+        name: "AI算力",
+        meta: "GPU 服务器 / 国产算力 / 液冷 / 18 条 A/B 来源",
+        rating: "景气延续",
+        summary: "先看资本开支与订单斜率，再看高估值链条的兑现能力。",
+        title: "AI算力行业专业投研报告",
+        lead: "围绕 AI 服务器、国产算力、液冷和推理侧基础设施展开，核心是云厂商资本开支和国产替代节奏。",
+        conclusion: "景气延续，但高估值环节必须用订单和收入确认来支撑。",
+        facts: "IEA、国家数据局与券商硬件链报告共同支撑算力景气框架。",
+        sources: [
+          ["A", "国家数据局", "数字中国相关政策资料", "2025-2026", "政策支撑"],
+          ["A", "IEA", "Electricity and AI related releases", "2025-2026", "能耗与算力背景"],
+          ["B", "国金证券", "国内算力研究", "2026-03", "景气判断"]
+        ],
+        companies: [
+          ["中际旭创", "光模块", "高景气高估值", "跟踪订单和出货"],
+          ["浪潮信息", "服务器", "受资本开支驱动", "看项目兑现"]
+        ]
+      },
+      {
+        id: "fiber",
+        name: "光纤",
+        meta: "光纤预制棒 / 光纤光缆 / AI DCI / 28 条 A/B 来源",
+        rating: "景气修复",
+        summary: "通信底座更稳，AI DCI 和海外需求提供上行弹性。",
+        title: "光纤行业专业投研报告",
+        lead: "围绕预制棒、光纤光缆、海缆与 AI 数据中心光联接需求展开，兼顾价格、需求和技术路线。",
+        conclusion: "通信底座稳中修复，弹性来自 AI DCI、海外市场与高端产品结构升级。",
+        facts: "行业报告与公司公告共同验证价格、产能和需求边际变化。",
+        sources: [
+          ["A", "上市公司公告", "年报 / 季报 / 经营公告", "2026", "财务与订单验证"],
+          ["B", "中邮证券", "光纤光缆行业跟踪", "2026-02", "需求边际判断"],
+          ["B", "华源证券", "通信产业链深度", "2026-02", "价值链映射"]
+        ],
+        companies: [
+          ["中天科技", "海缆 / 光通信", "估值中位", "关注订单与出海"],
+          ["长飞光纤", "光纤龙头", "景气修复型", "关注价格与产能利用率"]
+        ]
+      }
+    ];
+
+    const navList = document.getElementById("navList");
+    const industryList = document.getElementById("industryList");
+    const focusIndustry = document.getElementById("focusIndustry");
+    const focusMeta = document.getElementById("focusMeta");
+    const focusRating = document.getElementById("focusRating");
+    const focusSummary = document.getElementById("focusSummary");
+    const reportMeta = document.getElementById("reportMeta");
+    const reportTitle = document.getElementById("reportTitle");
+    const reportLead = document.getElementById("reportLead");
+    const reportConclusion = document.getElementById("reportConclusion");
+    const reportFacts = document.getElementById("reportFacts");
+    const sourcesBody = document.getElementById("sourcesBody");
+    const companiesBody = document.getElementById("companiesBody");
+
+    let active = industries[0].id;
+
+    function renderSidebar() {
+      navList.innerHTML = industries.map((item) => `
+        <button class="nav-button ${item.id === active ? "active" : ""}" data-id="${item.id}">
+          <strong>${item.name}</strong>
+          <span>${item.meta}</span>
+        </button>
+      `).join("");
+
+      navList.querySelectorAll(".nav-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          active = button.dataset.id;
+          render();
+        });
+      });
+    }
+
+    function renderIndustryList() {
+      industryList.innerHTML = industries.map((item) => `
+        <div class="industry-row">
+          <strong>${item.name}</strong>
+          <p>${item.meta}</p>
+          <span class="mini-tag">${item.rating}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderReport() {
+      const item = industries.find((entry) => entry.id === active) || industries[0];
+      focusIndustry.textContent = item.name;
+      focusMeta.textContent = item.meta;
+      focusRating.textContent = item.rating;
+      focusSummary.textContent = item.summary;
+      reportMeta.textContent = `${item.name} / ${item.meta}`;
+      reportTitle.textContent = item.title;
+      reportLead.textContent = item.lead;
+      reportConclusion.textContent = item.conclusion;
+      reportFacts.textContent = item.facts;
+
+      sourcesBody.innerHTML = item.sources.map((row) => `
+        <tr>
+          <td>${row[0]}</td>
+          <td><strong>${row[1]}</strong></td>
+          <td>${row[2]}</td>
+          <td>${row[3]}</td>
+          <td>${row[4]}</td>
+        </tr>
+      `).join("");
+
+      companiesBody.innerHTML = item.companies.map((row) => `
+        <tr>
+          <td><strong>${row[0]}</strong></td>
+          <td>${row[1]}</td>
+          <td>${row[2]}</td>
+          <td>${row[3]}</td>
+        </tr>
+      `).join("");
+    }
+
+    function render() {
+      renderSidebar();
+      renderIndustryList();
+      renderReport();
+    }
+
+    render();
+  </script>
+</body>
+</html>
